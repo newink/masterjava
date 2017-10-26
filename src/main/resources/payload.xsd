@@ -66,10 +66,6 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:element name="City" type="cityType"/>
-    <xs:element name="Project" type="projectType"/>
-    <xs:element name="Group" type="groupType"/>
-
     <xs:complexType name="cityType">
         <xs:simpleContent>
             <xs:extension base="xs:string">
@@ -90,8 +86,12 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute type="xs:IDREF" name="project" use="required"/>
-                <xs:attribute type="projectType" name="type" use="required"/>
+                <xs:attribute type="statusType" name="type" use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
+
+    <xs:element name="City" type="cityType"/>
+    <xs:element name="Project" type="projectType"/>
+    <xs:element name="Group" type="groupType"/>
 </xs:schema>
