@@ -43,6 +43,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element type="xs:string" name="fullName"/>
+                <xs:element type="groupList" name="group" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
             <xs:attribute type="flagType" name="flag" use="required"/>
             <xs:attribute type="xs:IDREF" name="city" use="required"/>
@@ -74,6 +75,14 @@
         </xs:simpleContent>
     </xs:complexType>
 
+    <xs:complexType name="groupList">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:IDREF" name="id" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
     <xs:complexType name="projectType">
         <xs:simpleContent>
             <xs:extension base="xs:string">
@@ -87,6 +96,7 @@
             <xs:extension base="xs:string">
                 <xs:attribute type="xs:IDREF" name="project" use="required"/>
                 <xs:attribute type="statusType" name="type" use="required"/>
+                <xs:attribute type="xs:ID" name="id" use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

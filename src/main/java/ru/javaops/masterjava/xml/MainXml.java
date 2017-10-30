@@ -1,8 +1,7 @@
 package ru.javaops.masterjava.xml;
 
 import com.google.common.io.Resources;
-import ru.javaops.masterjava.xml.schema.ObjectFactory;
-import ru.javaops.masterjava.xml.schema.Payload;
+import ru.javaops.masterjava.xml.schema.*;
 import ru.javaops.masterjava.xml.util.JaxbParser;
 import ru.javaops.masterjava.xml.util.Schemas;
 import ru.javaops.masterjava.xml.util.StaxStreamProcessor;
@@ -30,7 +29,15 @@ public class MainXml {
             System.out.println("Error occurred while opening XML file");
             System.exit(-1);
         }
-        payload.getUsers().getUser().forEach(user -> System.out.println(user.getEmail() + " " + user.getFullName()));
+        for (User user : payload.getUsers().getUser()) {
+            for (GroupList groupList : user.getGroup()) {
+                GroupType group = (GroupType) groupList.getId();
+                ProjectType projectType = (ProjectType) group.getProject();
+                if (projectType.getName().equals(args[0])) {
+                    System.out.printf("%s %s - Group: %s , Project: %s\n", user.getEmail(), user.getFullName(), group.getValue(), projectType.getValue());
+                }
+            }
+        }
 
 
         System.out.println("\n----------StaX----------");

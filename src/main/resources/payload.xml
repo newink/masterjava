@@ -4,12 +4,21 @@
     <Users>
         <User flag="active" city="kiv" email="gmail@gmail.com">
             <fullName>Full Name</fullName>
+            <group id="topjava2"/>
+            <group id="masterjava2"/>
+            <group id="basejava2"/>
         </User>
         <User flag="superuser" city="spb" email="admin@javaops.ru">
             <fullName>Admin</fullName>
+            <group id="topjava3"/>
+            <group id="masterjava3"/>
+            <group id="basejava3"/>
         </User>
         <User flag="deleted" city="spb" email="mail@yandex.ru">
             <fullName>Deleted</fullName>
+            <group id="topjava1"/>
+            <group id="basejava1"/>
+            <group id="masterjava1"/>
         </User>
     </Users>
     <Cities>
@@ -24,15 +33,15 @@
     </Projects>
 
     <Groups>
-        <Group type="registering" project="topjava">topjava1</Group>
-        <Group type="finished" project="topjava">topjava2</Group>
-        <Group type="current" project="topjava">topjava3</Group>
-        <Group type="registering" project="masterjava">masterjava1</Group>
-        <Group type="finished" project="masterjava">masterjava2</Group>
-        <Group type="current" project="masterjava">masterjava3</Group>
-        <Group type="registering" project="basejava">basejava1</Group>
-        <Group type="finished" project="basejava">basejava2</Group>
-        <Group type="current" project="basejava">basejava3</Group>
+        <Group type="registering" project="topjava" id="topjava1">topjava1</Group>
+        <Group type="finished" project="topjava" id="topjava2">topjava2</Group>
+        <Group type="current" project="topjava" id="topjava3">topjava3</Group>
+        <Group type="registering" project="masterjava" id="masterjava1">masterjava1</Group>
+        <Group type="finished" project="masterjava" id="masterjava2">masterjava2</Group>
+        <Group type="current" project="masterjava" id="masterjava3">masterjava3</Group>
+        <Group type="registering" project="basejava" id="basejava1">basejava1</Group>
+        <Group type="finished" project="basejava" id="basejava2">basejava2</Group>
+        <Group type="current" project="basejava" id="basejava3">basejava3</Group>
     </Groups>
 
 </Payload>
