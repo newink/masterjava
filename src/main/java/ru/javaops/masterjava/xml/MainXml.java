@@ -11,6 +11,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 import java.io.IOException;
+import java.util.List;
+
+import static j2html.TagCreator.*;
 
 public class MainXml {
     private static final JaxbParser JAXB_PARSER = new JaxbParser(ObjectFactory.class);
@@ -19,7 +22,7 @@ public class MainXml {
         JAXB_PARSER.setSchema(Schemas.ofClasspath("payload.xsd"));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("\n----------JAXB----------");
         Payload payload = null;
         try {
@@ -29,7 +32,8 @@ public class MainXml {
             System.out.println("Error occurred while opening XML file");
             System.exit(-1);
         }
-        for (User user : payload.getUsers().getUser()) {
+        List<User> userList = payload.getUsers().getUser();
+        for (User user : userList) {
             for (GroupList groupList : user.getGroup()) {
                 GroupType group = (GroupType) groupList.getId();
                 ProjectType projectType = (ProjectType) group.getProject();
@@ -38,6 +42,17 @@ public class MainXml {
                 }
             }
         }
+
+        System.out.println("\n----------HTML----------");
+        body(
+                table(
+                        tr(
+                                th("Имя"),
+                                th("Email")
+                        ),
+                        each(userList, user -> tr(th(user.getEmail()), th(user.getFullName())))
+                )
+        ).render(System.out);
 
 
         System.out.println("\n----------StaX----------");
