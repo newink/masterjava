@@ -1,7 +1,5 @@
 package ru.javaops.masterjava.service;
 
-import com.sun.org.apache.xerces.internal.xs.StringList;
-
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;

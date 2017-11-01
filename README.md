@@ -1,5 +1,5 @@
 # Многомодульный maven. Многопоточность. XML. Веб сервисы. Удаленное взаимодействие
-## <a href="http://javaops.ru/reg/masterjava">Регистрация</a>
+## <a href="http://javaops.ru/reg/ru.javaops.masterjava">Регистрация</a>
 ## [Программа проекта](#Программа-проекта-1)
 ### [Изменения проекта (Release Notes)](ReleaseNotes.md)
 
@@ -90,7 +90,7 @@
 ## ![hw](https://cloud.githubusercontent.com/assets/13649199/13672719/09593080-e6e7-11e5-81d1-5cb629c438ca.png) Задание первого занятия
 
 Вычекать этот проект:
-```git clone  https://github.com/JavaOPs/masterjava.git```
+```git clone  https://github.com/JavaOPs/ru.javaops.masterjava.git```
 
 - Применить <a href="https://habrahabr.ru/post/114797/">оптимизацию</a> к MatrixUtil.singleThreadMultiply
 - Реализовать метод `MatrixUtil.concurrentMultiply`, позволяющий многопоточно <a href="https://ru.wikipedia.org/wiki/Умножение_матриц">перемножать квадратные матрицы N*N</a>.

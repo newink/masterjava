@@ -1,6 +1,7 @@
 package ru.javaops.masterjava;
 
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.io.Resources;
 import j2html.tags.ContainerTag;
 import one.util.streamex.StreamEx;
@@ -22,7 +23,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Strings.nullToEmpty;
 import static j2html.TagCreator.*;
 
 public class MainXml {
@@ -104,7 +104,7 @@ public class MainXml {
             JaxbParser parser = new JaxbParser(User.class);
             while (processor.doUntil(XMLEvent.START_ELEMENT, "User")) {
                 String groupRefs = processor.getAttribute("groupRefs");
-                if (!Collections.disjoint(groupNames, Splitter.on(' ').splitToList(nullToEmpty(groupRefs)))) {
+                if (!Collections.disjoint(groupNames, Splitter.on(' ').splitToList(Strings.nullToEmpty(groupRefs)))) {
                     User user = parser.unmarshal(processor.getReader(), User.class);
                     users.add(user);
                 }

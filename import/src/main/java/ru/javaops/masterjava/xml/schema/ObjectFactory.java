@@ -10,7 +10,7 @@ import javax.xml.namespace.QName;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the ru.javaops.masterjava.xml.schema package. 
+ * generated in the ru.javaops.ru.javaops.masterjava.xml.schema package.
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -27,7 +27,7 @@ public class ObjectFactory {
     private final static QName _City_QNAME = new QName("http://javaops.ru", "City");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ru.javaops.masterjava.xml.schema
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ru.javaops.ru.javaops.masterjava.xml.schema
      * 
      */
     public ObjectFactory() {

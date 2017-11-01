@@ -3,19 +3,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.javaops</groupId>
-    <artifactId>masterjava</artifactId>
+    <artifactId>ru.javaops.masterjava</artifactId>
     <packaging>pom</packaging>
 
     <version>1.0-SNAPSHOT</version>
 
     <name>Master Java</name>
-    <url>https://github.com/JavaOPs/masterjava</url>
+    <url>https://github.com/JavaOPs/ru.javaops.masterjava</url>
     <modules>
         <module>import</module>
         <module>common</module>
+        <module>test</module>
         <!--
                 <module>webapp</module>
-                <module>mail-service</module>
+                <module>mail-ru.javaops.ru.javaops.masterjava.service</module>
                 <module>mail-api</module>
                 <module>test</module>
         -->
