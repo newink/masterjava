@@ -54,11 +54,16 @@ public class UploadServlet extends HttpServlet {
 
         try (StaxStreamProcessor processor = new StaxStreamProcessor(Files.asByteSource(savedFile).openStream())) {
             while (processor.startElement("User", "Users")) {
-                System.out.printf("Username: %s, Email: %s\n", processor.getText(), processor.getAttribute("email"));
+                String email = processor.getAttribute("email");
+                String name = processor.getText().trim();
+                System.out.printf("Username: %s, Email: %s\n", name, email);
             }
         } catch (XMLStreamException e) {
             renderHtml(req, resp, "error.html");
         }
+
+        savedFile.delete();
+        System.out.println("File deleted");
 
         renderHtml(req, resp, "success.html");
     }
