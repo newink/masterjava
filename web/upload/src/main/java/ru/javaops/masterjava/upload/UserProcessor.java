@@ -1,6 +1,7 @@
 package ru.javaops.masterjava.upload;
 
 import ru.javaops.masterjava.model.User;
+import ru.javaops.masterjava.model.UserFlag;
 import ru.javaops.masterjava.xml.util.JaxbParser;
 import ru.javaops.masterjava.xml.util.StaxStreamProcessor;
 
@@ -19,7 +20,10 @@ public class UserProcessor {
         List<User> users = new ArrayList<>();
 
         while (processor.doUntil(XMLEvent.START_ELEMENT, "User")) {
-            User user = parser.unmarshal(processor.getReader(), User.class);
+            final String email = processor.getAttribute("email");
+            final UserFlag userFlag = UserFlag.valueOf(processor.getAttribute("flag"));
+            final String fullName = processor.getReader().getElementText();
+            final User user = new User(fullName, email, userFlag);
             users.add(user);
         }
         return users;
