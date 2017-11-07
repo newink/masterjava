@@ -1,7 +1,5 @@
 package ru.javaops.masterjava.service.mail;
 
-import com.sun.org.apache.xerces.internal.xs.StringList;
-
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -14,6 +12,16 @@ public class MailServiceExecutor {
     private static final String INTERRUPTED_EXCEPTION = "+++ InterruptedException";
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(8);
+
+    public static void main(String[] args) {
+        MailServiceExecutor service = new MailServiceExecutor();
+        try {
+            GroupResult groupResult = service.sendToList("template", new HashSet<>(Arrays.asList("kyuek@email.ru", "nghjull@email.ru", "zejhkro@email.ru", "kuyek@email.ru", "nuldfgl@email.ru", "zedfgro@email.ru", "kfgek@email.ru", "nulasdl@email.ru", "zerdfgo@email.ru", "kgfek@email.ru", "nulasdl@email.ru", "zeasdro@email.ru", "kasdek@email.ru", "nulasdl@email.ru", "zeasdro@email.ru")));
+            System.out.println(groupResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public GroupResult sendToList(final String template, final Set<String> emails) throws Exception {
         CompletionService<MailResult> completionService = new ExecutorCompletionService<>(executorService);
@@ -64,7 +72,6 @@ public class MailServiceExecutor {
         }.call();
     }
 
-
     // dummy realization
     public MailResult sendToUser(String template, String email) throws Exception {
         try {
@@ -80,6 +87,11 @@ public class MailServiceExecutor {
         private final String email;
         private final String result;
 
+        private MailResult(String email, String cause) {
+            this.email = email;
+            this.result = cause;
+        }
+
         private static MailResult ok(String email) {
             return new MailResult(email, OK);
         }
@@ -90,11 +102,6 @@ public class MailServiceExecutor {
 
         public boolean isOk() {
             return OK.equals(result);
-        }
-
-        private MailResult(String email, String cause) {
-            this.email = email;
-            this.result = cause;
         }
 
         @Override
@@ -119,16 +126,6 @@ public class MailServiceExecutor {
             return "Success: " + success + '\n' +
                     "Failed: " + failed.toString() + '\n' +
                     (failedCause == null ? "" : "Failed cause" + failedCause);
-        }
-    }
-
-    public static void main(String[] args) {
-        MailService service = new MailService();
-        try {
-            GroupResult groupResult = service.sendToList("template", new HashSet<>(Arrays.asList("kyuek@email.ru", "nghjull@email.ru", "zejhkro@email.ru","kuyek@email.ru", "nuldfgl@email.ru", "zedfgro@email.ru","kfgek@email.ru", "nulasdl@email.ru", "zerdfgo@email.ru","kgfek@email.ru", "nulasdl@email.ru", "zeasdro@email.ru","kasdek@email.ru", "nulasdl@email.ru", "zeasdro@email.ru")));
-            System.out.println(groupResult);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
