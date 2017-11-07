@@ -1,5 +1,7 @@
 package ru.javaops.masterjava.upload;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thymeleaf.context.WebContext;
 import ru.javaops.masterjava.model.User;
 
@@ -19,6 +21,8 @@ import static ru.javaops.masterjava.common.web.ThymeleafListener.engine;
 @WebServlet(urlPatterns = "/", loadOnStartup = 1)
 @MultipartConfig
 public class UploadServlet extends HttpServlet {
+
+    private final static Logger log = LoggerFactory.getLogger(UploadServlet.class);
 
     private final UserProcessor userProcessor = new UserProcessor();
 
@@ -41,9 +45,11 @@ public class UploadServlet extends HttpServlet {
             try (InputStream is = filePart.getInputStream()) {
                 List<User> users = userProcessor.process(is);
                 webContext.setVariable("users", users);
+                log.trace("File successfully processed");
                 engine.process("result", webContext, resp.getWriter());
             }
         } catch (Exception e) {
+            log.error("File processing failed: {}", e);
             webContext.setVariable("exception", e);
             engine.process("exception", webContext, resp.getWriter());
         }
