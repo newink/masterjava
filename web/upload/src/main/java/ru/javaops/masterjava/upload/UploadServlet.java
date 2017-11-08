@@ -3,6 +3,8 @@ package ru.javaops.masterjava.upload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.context.WebContext;
+import ru.javaops.masterjava.persist.DBIProvider;
+import ru.javaops.masterjava.persist.dao.UserDao;
 import ru.javaops.masterjava.persist.model.User;
 
 import javax.servlet.ServletException;
@@ -45,7 +47,9 @@ public class UploadServlet extends HttpServlet {
             try (InputStream is = filePart.getInputStream()) {
                 List<User> users = userProcessor.process(is);
                 webContext.setVariable("users", users);
-                log.trace("File successfully processed");
+                UserDao dao = DBIProvider.getDao(UserDao.class);
+                dao.batchInsert(users);
+                log.warn("File successfully processed.");
                 engine.process("result", webContext, resp.getWriter());
             }
         } catch (Exception e) {
