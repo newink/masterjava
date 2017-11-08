@@ -21,5 +21,6 @@
         <module>test</module>
         <module>web</module>
         <module>services</module>
+        <module>persist</module>
     </modules>
 </project>
