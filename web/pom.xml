@@ -10,6 +10,7 @@
 
     <modules>
         <module>common-web</module>
-        <module>upload</module>
+        <module>import</module>
+        <module>pages</module>
     </modules>
 </project>

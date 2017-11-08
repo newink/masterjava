@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Uploaded users</title>
+</head>
+<body>
+<h3>First 20 users</h3>
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Flag</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!--/*@thymesVar id="users" type="java.util.List<ru.javaops.masterjava.model.User>"*/-->
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.fullName}"></td>
+        <td th:utext="${user.email}"></td>
+        <td th:text="${user.flag}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
