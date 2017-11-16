@@ -1,5 +1,6 @@
 package ru.javaops.masterjava.upload;
 
+import one.util.streamex.IntStreamEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.context.WebContext;
@@ -37,18 +38,26 @@ public class UploadServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final WebContext webContext = new WebContext(req, resp, req.getServletContext(), req.getLocale());
-
         try {
 //            http://docs.oracle.com/javaee/6/tutorial/doc/glraq.html
             Part filePart = req.getPart("fileToUpload");
+            Integer chunkSize = Integer.parseInt(req.getParameter("chunk-size"));
+
             if (filePart.getSize() == 0) {
                 throw new IllegalStateException("Upload file have not been selected");
             }
+            if (chunkSize < 1) {
+                throw new IllegalStateException("Chunk size can't be less than 1");
+            }
             try (InputStream is = filePart.getInputStream()) {
                 List<User> users = userProcessor.process(is);
-                webContext.setVariable("users", users);
                 UserDao dao = DBIProvider.getDao(UserDao.class);
-                dao.batchInsert(users);
+                int[] insertedUserIds = dao.batchInsert(users, chunkSize);
+                List<User> insertedUserList = IntStreamEx.range(0, users.size())
+                        .filter(i -> insertedUserIds[i] != 0)
+                        .mapToObj(users::get)
+                        .toList();
+                webContext.setVariable("users", insertedUserList);
                 log.warn("File successfully processed.");
                 engine.process("result", webContext, resp.getWriter());
             }
