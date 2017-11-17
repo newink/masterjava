@@ -38,17 +38,11 @@ public class UploadServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final WebContext webContext = new WebContext(req, resp, req.getServletContext(), req.getLocale());
+        String message;
         try {
 //            http://docs.oracle.com/javaee/6/tutorial/doc/glraq.html
             Part filePart = req.getPart("fileToUpload");
             Integer chunkSize = Integer.parseInt(req.getParameter("chunk-size"));
-
-            if (filePart.getSize() == 0) {
-                throw new IllegalStateException("Upload file have not been selected");
-            }
-            if (chunkSize < 1) {
-                throw new IllegalStateException("Chunk size can't be less than 1");
-            }
             try (InputStream is = filePart.getInputStream()) {
                 List<User> users = userProcessor.process(is);
                 UserDao dao = DBIProvider.getDao(UserDao.class);
@@ -60,11 +54,20 @@ public class UploadServlet extends HttpServlet {
                 webContext.setVariable("users", insertedUserList);
                 log.warn("File successfully processed.");
                 engine.process("result", webContext, resp.getWriter());
+                return;
             }
         } catch (Exception e) {
             log.error("File processing failed: {}", e);
-            webContext.setVariable("exception", e);
-            engine.process("exception", webContext, resp.getWriter());
+            message = e.toString();
         }
+        renderMessage(req, resp, message);
+    }
+
+    private void renderMessage(HttpServletRequest request, HttpServletResponse response, String message) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        final WebContext webContext =
+                new WebContext(request, response, request.getServletContext(), request.getLocale());
+        webContext.setVariable("message", message);
+        engine.process("upload", webContext, response.getWriter());
     }
 }
