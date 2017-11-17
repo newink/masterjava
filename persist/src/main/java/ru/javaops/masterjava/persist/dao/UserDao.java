@@ -1,6 +1,7 @@
 package ru.javaops.masterjava.persist.dao;
 
 import com.bertoncelj.jdbi.entitymapper.EntityMapperFactory;
+import one.util.streamex.IntStreamEx;
 import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
@@ -39,4 +40,12 @@ public abstract class UserDao implements AbstractDao {
     @Override
     @SqlUpdate("TRUNCATE users")
     public abstract void clean();
+
+    public List<String> batchInsertAndGetConflictEmails(List<User> users) {
+        int[] result = batchInsert(users, users.size());
+        return IntStreamEx.range(0, users.size())
+                .filter(i -> result[i] == 0)
+                .mapToObj(index -> users.get(index).getEmail())
+                .toList();
+    }
 }

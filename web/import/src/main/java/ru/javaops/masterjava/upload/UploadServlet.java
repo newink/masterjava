@@ -1,12 +1,8 @@
 package ru.javaops.masterjava.upload;
 
-import one.util.streamex.IntStreamEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.context.WebContext;
-import ru.javaops.masterjava.persist.DBIProvider;
-import ru.javaops.masterjava.persist.dao.UserDao;
-import ru.javaops.masterjava.persist.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -44,14 +40,8 @@ public class UploadServlet extends HttpServlet {
             Part filePart = req.getPart("fileToUpload");
             Integer chunkSize = Integer.parseInt(req.getParameter("chunk-size"));
             try (InputStream is = filePart.getInputStream()) {
-                List<User> users = userProcessor.process(is);
-                UserDao dao = DBIProvider.getDao(UserDao.class);
-                int[] insertedUserIds = dao.batchInsert(users, chunkSize);
-                List<User> insertedUserList = IntStreamEx.range(0, users.size())
-                        .filter(i -> insertedUserIds[i] != 0)
-                        .mapToObj(users::get)
-                        .toList();
-                webContext.setVariable("users", insertedUserList);
+                List<UserProcessor.FailedEmail> failedEmails = userProcessor.process(is, chunkSize);
+                webContext.setVariable("failed", failedEmails);
                 log.warn("File successfully processed.");
                 engine.process("result", webContext, resp.getWriter());
                 return;
