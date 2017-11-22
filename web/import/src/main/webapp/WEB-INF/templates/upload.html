@@ -8,11 +8,11 @@
     <h2 th:if="${message != null && !message.isEmpty()}" th:text="${message}">Message</h2>
     <h3>Select xml file to upload</h3>
     <p>
-        <input type="file" name="fileToUpload" id="fileToUpload"><br/>
+        <input type="file" name="fileToUpload" id="fileToUpload" required><br/>
     </p>
     <p>
         <label for="chunk-size">Batch save chunk size</label>
-        <input type="number" id="chunk-size" name="chunk-size">
+        <input type="number" id="chunk-size" name="chunk-size" required>
     </p>
     <p>
         <input type="submit" value="Upload" name="submit">

@@ -1,6 +1,5 @@
 package ru.javaops.masterjava.upload;
 
-import one.util.streamex.StreamEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javaops.masterjava.persist.DBIProvider;
@@ -14,7 +13,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,13 +24,14 @@ import java.util.concurrent.Future;
 public class UserProcessor {
     private static final Logger log = LoggerFactory.getLogger(UserProcessor.class);
     private static final int THREAD_COUNT = 4;
-    private UserDao userDao = DBIProvider.getDao(UserDao.class);
+
+    private static final UserDao userDao = DBIProvider.getDao(UserDao.class);
     private ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
 
     public List<FailedEmail> process(final InputStream is, int chunkSize) throws XMLStreamException, JAXBException {
         final StaxStreamProcessor processor = new StaxStreamProcessor(is);
         List<User> chunk = new ArrayList<>(chunkSize);
-        List<ChunkFuture> futures = new ArrayList<>();
+        Map<String, Future<List<String>>> chunkFutures = new LinkedHashMap<>();
 
         while (processor.doUntil(XMLEvent.START_ELEMENT, "User")) {
             final String email = processor.getAttribute("email");
@@ -38,31 +40,38 @@ public class UserProcessor {
             final User user = new User(fullName, email, userFlag);
             chunk.add(user);
             if (chunk.size() == chunkSize) {
-                futures.add(submit(chunk));
-                chunk = new ArrayList<>(chunkSize);
+                addChunkFutures(chunkFutures, chunk);
             }
         }
         if (!chunk.isEmpty()) {
-            futures.add(submit(chunk));
+            addChunkFutures(chunkFutures, chunk);
         }
 
-        List<FailedEmail> failed = new ArrayList<>();
-        futures.forEach(chunkFuture -> {
+        List<String> alreadyPresents = new ArrayList<>();
+        List<FailedEmail> failedEmails = new ArrayList<>();
+        chunkFutures.forEach((emailRange, listFuture) -> {
             try {
-                failed.addAll(StreamEx.of(chunkFuture.future.get()).map(email -> new FailedEmail(email, "Email already present")).toList());
-                log.info(chunkFuture.emailRange + " successfully executed!");
+                List<String> failedEmailsStrings = listFuture.get();
+                log.info("{} successfully executed with already present: {}", emailRange, failedEmailsStrings);
+                alreadyPresents.addAll(failedEmailsStrings);
             } catch (InterruptedException | ExecutionException e) {
-                failed.add(new FailedEmail(chunkFuture.emailRange, e.getMessage()));
-                log.error("Error while processing chunk {}, reason: {}", chunkFuture.emailRange, e);
+                failedEmails.add(new FailedEmail(emailRange, e.getMessage()));
+                log.error("Error while processing chunk {}, reason: {}", emailRange, e);
             }
         });
-        return failed;
+        if (!alreadyPresents.isEmpty()) {
+            failedEmails.add(new FailedEmail(alreadyPresents.toString(), "already presents"));
+        }
+        return failedEmails;
     }
 
-    private ChunkFuture submit(List<User> chunk) {
-        return new ChunkFuture(chunk, executorService.submit(() ->
-                userDao.batchInsertAndGetConflictEmails(chunk)));
+    private void addChunkFutures(Map<String, Future<List<String>>> chunkFutures, List<User> chunk) {
+        String key = String.format("[%s-%s]", chunk.get(0).getEmail(), chunk.get(chunk.size() - 1).getEmail());
+        Future<List<String>> future = executorService.submit(() -> userDao.batchInsertAndGetConflictEmails(chunk));
+        chunkFutures.put(key, future);
+        log.info("Submited chunk: {}", key);
     }
+
 
     public static class FailedEmail {
         public String emailOrRange;
@@ -76,19 +85,6 @@ public class UserProcessor {
         @Override
         public String toString() {
             return emailOrRange + " - " + reason;
-        }
-    }
-
-    public static class ChunkFuture {
-        public String emailRange;
-        Future<List<String>> future;
-
-        public ChunkFuture(List<User> chunk, Future<List<String>> future) {
-            this.future = future;
-            this.emailRange = chunk.get(0).getEmail();
-            if (chunk.size() > 1) {
-                this.emailRange += '-' + chunk.get(chunk.size() - 1).getEmail();
-            }
         }
     }
 }

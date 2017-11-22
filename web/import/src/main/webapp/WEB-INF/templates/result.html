@@ -7,18 +7,11 @@
 <h4><a href="">Upload XML</a></h4>
 <h3>Uploaded users</h3>
 <table border="1" cellpadding="8" cellspacing="0">
-    <thead>
-    <tr>
-        <th>Full Name</th>
-        <th>Email</th>
-        <th>Flag</th>
-    </tr>
-    </thead>
-    <tbody>
-    <ul>
-        <li th:each="fail: ${failed}" th:text="${fail}"></li>
-    </ul>
-    </tbody>
+    <div>
+        <ul>
+            <li th:each="fail: ${failed}" th:text="${fail}"></li>
+        </ul>
+    </div>
 </table>
 </body>
 </html>
