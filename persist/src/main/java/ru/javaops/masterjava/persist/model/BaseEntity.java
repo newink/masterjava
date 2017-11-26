@@ -1,5 +1,6 @@
 package ru.javaops.masterjava.persist.model;
 
+import com.github.rkmk.annotations.PrimaryKey;
 import lombok.*;
 
 @NoArgsConstructor
@@ -9,6 +10,7 @@ abstract public class BaseEntity {
 
     @Getter
     @Setter
+    @PrimaryKey
     protected Integer id;
 
     public boolean isNew() {
