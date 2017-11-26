@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import static ru.javaops.masterjava.common.web.ThymeleafListener.engine;
 
-@WebServlet("")
+@WebServlet("/")
 public class UsersServlet extends HttpServlet {
     private UserDao userDao = DBIProvider.getDao(UserDao.class);
 

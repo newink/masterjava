@@ -49,8 +49,8 @@
                         <configfiles>
                             <configfile>
                                 <file>${masterjava.config}/context.xml</file>
-                                <todir>conf/Catalina/localhost/</todir>
-                                <tofile>context.xml.default</tofile>
+                                <todir>${user.home}/Documents/Tomcat/conf/</todir>
+                                <tofile>context.xml</tofile>
                             </configfile>
                         </configfiles>
                     </configuration>
