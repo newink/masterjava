@@ -29,6 +29,9 @@ CREATE TABLE cities (
   mnemonic TEXT NOT NULL
 );
 
+CREATE UNIQUE INDEX name_idx
+  ON cities (name);
+
 -- Group table
 DROP TABLE IF EXISTS groups CASCADE;
 DROP SEQUENCE IF EXISTS group_seq;
@@ -66,3 +69,7 @@ CREATE TABLE users_projects (
   user_id    INTEGER REFERENCES users (id),
   project_id INTEGER REFERENCES projects (id)
 );
+
+-- cities relation
+ALTER TABLE users
+  ADD COLUMN city_id INTEGER;

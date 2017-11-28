@@ -26,12 +26,13 @@ public abstract class UserDao implements AbstractDao {
     @SqlQuery("SELECT nextval('user_seq')")
     abstract int getNextVal();
 
-    @Transaction
+    @Transaction()
     public int getSeqAndSkip(int step) {
         int id = getNextVal();
-        DBIProvider.getDBI().useHandle(h -> h.execute("ALTER SEQUENCE user_seq RESTART WITH " + (id + step)));
+        DBIProvider.getDBI().useHandle(handle -> handle.execute("ALTER SEQUENCE user_seq RESTART WITH " + (id + step)));
         return id;
     }
+
 
     @SqlUpdate("INSERT INTO users (full_name, email, flag) VALUES (:fullName, :email, CAST(:flag AS USER_FLAG)) ")
     @GetGeneratedKeys
@@ -59,7 +60,7 @@ public abstract class UserDao implements AbstractDao {
         int[] result = insertBatch(users, users.size());
         return IntStreamEx.range(0, users.size())
                 .filter(i -> result[i] == 0)
-                .mapToObj(index -> users.get(index))
+                .mapToObj(index -> users.get(index).getEmail())
                 .toList();
     }
 }
