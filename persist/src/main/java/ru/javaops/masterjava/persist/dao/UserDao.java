@@ -59,7 +59,7 @@ public abstract class UserDao implements AbstractDao {
         int[] result = insertBatch(users, users.size());
         return IntStreamEx.range(0, users.size())
                 .filter(i -> result[i] == 0)
-                .mapToObj(index -> users.get(index).getEmail())
+                .mapToObj(index -> users.get(index))
                 .toList();
     }
 }

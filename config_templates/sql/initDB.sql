@@ -1,5 +1,5 @@
 -- Users table
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users CASCADE;
 DROP SEQUENCE IF EXISTS user_seq;
 DROP TYPE IF EXISTS USER_FLAG;
 
@@ -24,12 +24,13 @@ DROP SEQUENCE IF EXISTS cities_seq;
 CREATE SEQUENCE cities_seq START 10000;
 
 CREATE TABLE cities (
-  id   INTEGER PRIMARY KEY DEFAULT nextval('cities_seq'),
-  name TEXT NOT NULL
+  id       INTEGER PRIMARY KEY DEFAULT nextval('cities_seq'),
+  name     TEXT NOT NULL,
+  mnemonic TEXT NOT NULL
 );
 
 -- Group table
-DROP TABLE IF EXISTS groups;
+DROP TABLE IF EXISTS groups CASCADE;
 DROP SEQUENCE IF EXISTS group_seq;
 DROP TYPE IF EXISTS GROUP_TYPE;
 
@@ -43,17 +44,25 @@ CREATE TABLE groups (
 );
 
 -- Projects table
-DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS projects CASCADE;
 DROP SEQUENCE IF EXISTS projects_seq;
 
 CREATE SEQUENCE projects_seq START 10000;
 
 CREATE TABLE projects (
-  id       INTEGER PRIMARY KEY DEFAULT nextval('projects_seq'),
-  name     TEXT NOT NULL,
-  group_id INTEGER REFERENCES groups (id)
+  id          INTEGER PRIMARY KEY DEFAULT nextval('projects_seq'),
+  description TEXT NOT NULL,
+  group_id    INTEGER REFERENCES groups (id)
 );
 
--- Alter table users add references
-ALTER TABLE users
-  ADD COLUMN city_id INTEGER REFERENCES cities (id);
+-- users-projects relation table
+DROP TABLE IF EXISTS users_projects;
+DROP SEQUENCE IF EXISTS users_projects_seq;
+
+CREATE SEQUENCE users_projects_seq;
+
+CREATE TABLE users_projects (
+  id         INTEGER PRIMARY KEY DEFAULT nextval('users_projects_seq'),
+  user_id    INTEGER REFERENCES users (id),
+  project_id INTEGER REFERENCES projects (id)
+);
