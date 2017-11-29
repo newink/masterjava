@@ -24,8 +24,8 @@ public class CityProcessor {
     private static CityCache cityCache = CityCache.getInstance();
 
     public List<String> process(InputStream is) throws XMLStreamException, JAXBException {
-        val processor = new StaxStreamProcessor(is);
         val unmarshaller = jaxbParser.createUnmarshaller();
+        val processor = new StaxStreamProcessor(is);
 
         List<String> failedCitiesNames = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class CityProcessor {
             if (possibleInserted.getId() == 0) {
                 failedCitiesNames.add(possibleInserted.getName());
             } else {
-                cityCache.put(possibleInserted.getName(), possibleInserted.getId());
+                cityCache.put(possibleInserted.getMnemonic(), possibleInserted.getId());
             }
         }
         return failedCitiesNames;

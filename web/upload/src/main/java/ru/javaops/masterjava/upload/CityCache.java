@@ -6,6 +6,7 @@ import com.google.common.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
 import ru.javaops.masterjava.persist.DBIProvider;
 import ru.javaops.masterjava.persist.dao.CityDao;
+import ru.javaops.masterjava.persist.model.City;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +26,8 @@ public class CityCache {
                 .build(new CacheLoader<String, Integer>() {
                     @Override
                     public Integer load(String s) throws Exception {
-                        return cityDao.getByName(s).getId();
+                        City byMnemonic = cityDao.getByMnemonic(s);
+                        return byMnemonic == null ? null : byMnemonic.getId();
                     }
                 });
     }

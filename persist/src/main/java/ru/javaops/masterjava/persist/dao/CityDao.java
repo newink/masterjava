@@ -33,8 +33,8 @@ public abstract class CityDao implements AbstractDao {
     @SqlQuery("SELECT * FROM cities ORDER BY name")
     public abstract List<City> getAll();
 
-    @SqlQuery("SELECT * FROM cities WHERE name = :name")
-    public abstract City getByName(@Bind String name);
+    @SqlQuery("SELECT * FROM cities WHERE mnemonic = :param")
+    public abstract City getByMnemonic(@Bind("param") String name);
 
     @Override
     @SqlUpdate("TRUNCATE cities")

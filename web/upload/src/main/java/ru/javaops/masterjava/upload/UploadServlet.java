@@ -42,18 +42,22 @@ public class UploadServlet extends HttpServlet {
                 message = "Chunk Size must be > 1";
             } else {
                 Part filePart = req.getPart("fileToUpload");
+                List<UserProcessor.FailedEmails> failed;
                 try (InputStream is = filePart.getInputStream()) {
                     List<String> failedCities = cityProcessor.process(is);
                     log.info("Already existent cities names: {}", failedCities);
-
-                    List<UserProcessor.FailedEmails> failed = userProcessor.process(is, chunkSize);
-                    log.info("Failed users: " + failed);
-                    final WebContext webContext =
-                            new WebContext(req, resp, req.getServletContext(), req.getLocale(),
-                                    ImmutableMap.of("users", failed));
-                    engine.process("result", webContext, resp.getWriter());
-                    return;
                 }
+
+                try (InputStream is = filePart.getInputStream()) {
+                    failed = userProcessor.process(is, chunkSize);
+                }
+
+                log.info("Failed users: " + failed);
+                final WebContext webContext =
+                        new WebContext(req, resp, req.getServletContext(), req.getLocale(),
+                                ImmutableMap.of("users", failed));
+                engine.process("result", webContext, resp.getWriter());
+                return;
             }
         } catch (Exception e) {
             log.info(e.getMessage(), e);

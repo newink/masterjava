@@ -12,6 +12,8 @@ public class User extends BaseEntity {
     private @NonNull String fullName;
     private @NonNull String email;
     private @NonNull UserFlag flag;
+
+    @Column("city_id")
     private @NonNull
     Integer cityId;
 
