@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class CityCache {
     private static CityCache instance;
 
-    private LoadingCache<String, Integer> citiesCache;
+    private LoadingCache<String, City> citiesCache;
     private CityDao cityDao;
 
     private CityCache() {
@@ -23,11 +23,10 @@ public class CityCache {
         citiesCache = CacheBuilder.newBuilder()
                 .maximumSize(1000)
                 .expireAfterWrite(10, TimeUnit.MINUTES)
-                .build(new CacheLoader<String, Integer>() {
+                .build(new CacheLoader<String, City>() {
                     @Override
-                    public Integer load(String s) throws Exception {
-                        City byMnemonic = cityDao.getByMnemonic(s);
-                        return byMnemonic == null ? null : byMnemonic.getId();
+                    public City load(String s) throws Exception {
+                        return cityDao.getByMnemonic(s);
                     }
                 });
     }
@@ -43,7 +42,7 @@ public class CityCache {
         return instance;
     }
 
-    public Integer getCityId(String name) {
+    public City getCityId(String name) {
         try {
             return citiesCache.get(name);
         } catch (ExecutionException e) {
@@ -52,7 +51,7 @@ public class CityCache {
         }
     }
 
-    public void put(String key, Integer value) {
+    public void put(String key, City value) {
         citiesCache.put(key, value);
     }
 }

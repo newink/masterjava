@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data
 @RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "city")
 @NoArgsConstructor
 public class User extends BaseEntity {
     @Column("full_name")
@@ -16,6 +16,8 @@ public class User extends BaseEntity {
     @Column("city_id")
     private @NonNull
     Integer cityId;
+
+    private City city;
 
     public User(Integer id, String fullName, String email, UserFlag flag, Integer cityId) {
         this(fullName, email, flag, cityId);

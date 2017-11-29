@@ -35,7 +35,7 @@ public class CityProcessor {
             if (possibleInserted.getId() == 0) {
                 failedCitiesNames.add(possibleInserted.getName());
             } else {
-                cityCache.put(possibleInserted.getMnemonic(), possibleInserted.getId());
+                cityCache.put(possibleInserted.getMnemonic(), possibleInserted);
             }
         }
         return failedCitiesNames;

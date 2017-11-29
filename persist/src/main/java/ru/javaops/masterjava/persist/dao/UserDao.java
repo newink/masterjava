@@ -4,8 +4,10 @@ import com.bertoncelj.jdbi.entitymapper.EntityMapperFactory;
 import one.util.streamex.IntStreamEx;
 import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
+import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
 import ru.javaops.masterjava.persist.DBIProvider;
+import ru.javaops.masterjava.persist.mapper.UserWithCityMapper;
 import ru.javaops.masterjava.persist.model.User;
 
 import java.util.List;
@@ -41,7 +43,9 @@ public abstract class UserDao implements AbstractDao {
     @SqlUpdate("INSERT INTO users (id, full_name, email, flag, city_id) VALUES (:id, :fullName, :email, CAST(:flag AS USER_FLAG), :cityId) ")
     abstract void insertWitId(@BindBean User user);
 
-    @SqlQuery("SELECT * FROM users ORDER BY full_name, email LIMIT :it")
+    @Mapper(UserWithCityMapper.class)
+    @SqlQuery("SELECT u.id AS user_id, full_name, city_id, email, flag, c.mnemonic AS city_mnemonic, c.name AS city_name FROM users u" +
+            " LEFT JOIN cities c ON city_id = c.id ORDER BY full_name, email LIMIT :it")
     public abstract List<User> getWithLimit(@Bind int limit);
 
     //   http://stackoverflow.com/questions/13223820/postgresql-delete-all-content

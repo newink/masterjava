@@ -17,12 +17,12 @@ public class UserTestData {
     public static List<User> FIST5_USERS;
 
     public static void init() {
-        ADMIN = new User("Admin", "admin@javaops.ru", UserFlag.superuser, 1);
-        DELETED = new User("Deleted", "deleted@yandex.ru", UserFlag.deleted, 1);
-        FULL_NAME = new User("Full Name", "gmail@gmail.com", UserFlag.active, 1);
-        USER1 = new User("User1", "user1@gmail.com", UserFlag.active, 1);
-        USER2 = new User("User2", "user2@yandex.ru", UserFlag.active, 1);
-        USER3 = new User("User3", "user3@yandex.ru", UserFlag.active, 1);
+        ADMIN = new User("Admin", "admin@javaops.ru", UserFlag.superuser, 10000);
+        DELETED = new User("Deleted", "deleted@yandex.ru", UserFlag.deleted, 10000);
+        FULL_NAME = new User("Full Name", "gmail@gmail.com", UserFlag.active, 10000);
+        USER1 = new User("User1", "user1@gmail.com", UserFlag.active, 10000);
+        USER2 = new User("User2", "user2@yandex.ru", UserFlag.active, 10000);
+        USER3 = new User("User3", "user3@yandex.ru", UserFlag.active, 10000);
         FIST5_USERS = ImmutableList.of(ADMIN, DELETED, FULL_NAME, USER1, USER2);
     }
 
