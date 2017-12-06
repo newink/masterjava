@@ -32,3 +32,15 @@ CREATE TABLE user_group (
   group_id INTEGER NOT NULL REFERENCES groups (id),
   CONSTRAINT users_group_idx UNIQUE (user_id, group_id)
 );
+
+-- changeset newink:3
+
+CREATE TYPE RESULT_TYPE AS ENUM ('SUCCESS', 'FAIL');
+
+CREATE TABLE mailing_results (
+  id         INTEGER PRIMARY KEY  DEFAULT nextval('common_seq'),
+  result     RESULT_TYPE NOT NULL,
+  reason     TEXT,
+  email      TEXT        NOT NULL,
+  created_at DATE        NOT NULL DEFAULT now()
+)
