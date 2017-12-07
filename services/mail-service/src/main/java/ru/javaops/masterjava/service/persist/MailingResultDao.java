@@ -1,9 +1,9 @@
-package ru.javaops.masterjava.persist.dao;
+package ru.javaops.masterjava.service.persist;
 
 import com.bertoncelj.jdbi.entitymapper.EntityMapperFactory;
 import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
-import ru.javaops.masterjava.persist.model.MailingResult;
+import ru.javaops.masterjava.persist.dao.AbstractDao;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
-package ru.javaops.masterjava.persist.model;
+package ru.javaops.masterjava.service.persist;
 
 import lombok.*;
+import ru.javaops.masterjava.persist.model.BaseEntity;
 import ru.javaops.masterjava.persist.model.type.Result;
 
 @Data
