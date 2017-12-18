@@ -18,7 +18,7 @@
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.25</slf4j.version>
 
-        <masterjava.config>/apps/masterjava/config/</masterjava.config>
+        <masterjava.config>/home/newink/study/java/config</masterjava.config>
         <dependency.locations.enabled>false</dependency.locations.enabled>
     </properties>
 
@@ -73,6 +73,17 @@
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
+        <resources>
+            <resource>
+                <directory>${masterjava.config}</directory>
+                <includes>
+                    <include>mailService.wsdl</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
 
     <dependencies>
