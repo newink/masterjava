@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Mail</title>
+</head>
+<body>
+<form action="" method="post" th:if="!${users.isEmpty()}">
+    <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+    <h2 th:if="!${message != null && message.isEmpty()}" th:text="${message}">Message</h2>
+    <h3>Select users to send mail to</h3>
+
+    <ul style="list-style: none">
+        <!--/*@thymesVar id="users" type="java.util.List<ru.javaops.masterjava.persist.model.User>"*/-->
+        <li th:each="user, index: ${users}">
+            <input type="checkbox" th:attr="id='user-' + ${index.index}, name=${user.email}" title="">
+            <label th:attr="for='user-' + ${index.index}" th:text="${user.fullName} + ' ' + ${user.email}"></label>
+        </li>
+    </ul>
+
+    <p>
+        <input type="submit" value="Send mails" name="submit">
+    </p>
+</form>
+</body>
+</html>

@@ -6,11 +6,11 @@
     <artifactId>web</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
     <name>Web</name>
 
     <modules>
         <module>common-web</module>
         <module>upload</module>
-        <module>webapp</module>
     </modules>
 </project>
