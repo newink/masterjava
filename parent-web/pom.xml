@@ -75,7 +75,16 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>logback.xml</include>
+                    <include>mailService.wsdl</include>
                 </includes>
+            </resource>
+            <resource>
+                <directory>${masterjava.config}</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>mailService.wsdl</include>
+                </includes>
+                <targetPath>wsdl/</targetPath>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>

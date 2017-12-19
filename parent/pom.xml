@@ -73,17 +73,6 @@
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
-        <resources>
-            <resource>
-                <directory>${masterjava.config}</directory>
-                <includes>
-                    <include>mailService.wsdl</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
     </build>
 
     <dependencies>

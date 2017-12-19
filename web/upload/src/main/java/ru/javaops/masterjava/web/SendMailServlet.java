@@ -6,6 +6,8 @@ import org.thymeleaf.context.WebContext;
 import ru.javaops.masterjava.persist.DBIProvider;
 import ru.javaops.masterjava.persist.dao.UserDao;
 import ru.javaops.masterjava.persist.model.User;
+import ru.javaops.masterjava.service.mail.Addressee;
+import ru.javaops.masterjava.service.mail.MailWSClient;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,7 +37,20 @@ public class SendMailServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Set<String> strings = StreamEx.of(req.getParameterNames()).filter(s -> s.contains("@") && !s.isEmpty()).toSet();
-        //MailWSClient.sendToGroup(strings, Collections.emptySet(), );
+        Set<Addressee> addressees = stringsToAddressees(req.getParameterValues("to[]"));
+        Set<Addressee> copies = stringsToAddressees(req.getParameterValues("cc[]"));
+
+        String message = req.getParameter("message");
+        String subject = req.getParameter("subject");
+        log.info("Addressees: {}, Message: {}, Subject: {}", addressees, message, subject);
+
+        MailWSClient.sendToGroup(addressees, copies, subject, message);
+    }
+
+    private Set<Addressee> stringsToAddressees(String[] strings) {
+        return StreamEx.of(strings).nonNull().filter(s -> !s.isEmpty()).map(s -> {
+            String[] split = s.split(" - ");
+            return new Addressee(split[1], split[0]);
+        }).toSet();
     }
 }
