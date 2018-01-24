@@ -1,6 +1,24 @@
 --liquibase formatted sql
 
 --changeset gkislin:1
+DROP TABLE IF EXISTS users;
+DROP SEQUENCE IF EXISTS user_seq;
+DROP TYPE IF EXISTS user_flag;
+
+CREATE TYPE user_flag AS ENUM ('active', 'deleted', 'superuser');
+
+CREATE SEQUENCE user_seq START 100000;
+
+CREATE TABLE users (
+  id        INTEGER PRIMARY KEY DEFAULT nextval('user_seq'),
+  full_name TEXT NOT NULL,
+  email     TEXT NOT NULL,
+  flag      user_flag NOT NULL
+);
+
+CREATE UNIQUE INDEX email_idx ON users (email);
+
+--changeset gkislin:2
 CREATE SEQUENCE common_seq START 100000;
 
 CREATE TABLE city (
@@ -11,7 +29,7 @@ CREATE TABLE city (
 ALTER TABLE users
   ADD COLUMN city_ref TEXT REFERENCES city (ref) ON UPDATE CASCADE;
 
---changeset gkislin:2
+--changeset gkislin:3
 CREATE TABLE project (
   id          INTEGER PRIMARY KEY DEFAULT nextval('common_seq'),
   name        TEXT UNIQUE NOT NULL,
@@ -33,7 +51,7 @@ CREATE TABLE user_group (
   CONSTRAINT users_group_idx UNIQUE (user_id, group_id)
 );
 
---changeset gkislin:3
+--changeset gkislin:4
 CREATE TABLE mail_hist (
   id       SERIAL PRIMARY KEY,
   list_to  TEXT      NULL,
