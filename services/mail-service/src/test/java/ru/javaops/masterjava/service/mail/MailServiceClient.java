@@ -17,13 +17,13 @@ public class MailServiceClient {
 
         MailService mailService = service.getPort(MailService.class);
 
-        String state = mailService.sendToGroup(ImmutableSet.of(new Addressee("masterjava@javaops.ru", null)), null,
-                "Group mail subject", "Group mail body");
+        String state = mailService.sendToGroup(ImmutableSet.of(new Addressee("trashink@yandex.ru", null)), null,
+                "Group mail subject", "Group mail body", new byte[1]);
         System.out.println("Group mail state: " + state);
 
         GroupResult groupResult = mailService.sendBulk(ImmutableSet.of(
-                new Addressee("Мастер Java <masterjava@javaops.ru>"),
-                new Addressee("Bad Email <bad_email.ru>")), "Bulk mail subject", "Bulk mail body");
+                new Addressee("Мастер Java <trashink@yandex.ru>"),
+                new Addressee("Bad Email <bad_email.ru>")), "Bulk mail subject", "Bulk mail body", new byte[1]);
         System.out.println("\nBulk mail groupResult:\n" + groupResult);
     }
 }

@@ -19,12 +19,16 @@ public interface MailService {
             @WebParam(name = "to") Set<Addressee> to,
             @WebParam(name = "cc") Set<Addressee> cc,
             @WebParam(name = "subject") String subject,
-            @WebParam(name = "body") String body) throws WebStateException;
+            @WebParam(name = "body") String body,
+            @WebParam(name = "filename") String filename,
+            @WebParam(name = "attachment") byte[] attachment) throws WebStateException;
 
     @WebMethod
     GroupResult sendBulk(
             @WebParam(name = "to") Set<Addressee> to,
             @WebParam(name = "subject") String subject,
-            @WebParam(name = "body") String body) throws WebStateException;
+            @WebParam(name = "body") String body,
+            @WebParam(name = "filename") String filename,
+            @WebParam(name = "attachment") byte[] attachment) throws WebStateException;
 
 }
