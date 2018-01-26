@@ -15,7 +15,7 @@ import java.io.IOException;
 @Slf4j
 public class SendServlet extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String result;
         try {
             log.info("Start sending");
@@ -24,7 +24,7 @@ public class SendServlet extends HttpServlet {
             String users = req.getParameter("users");
             String subject = req.getParameter("subject");
             String body = req.getParameter("body");
-            GroupResult groupResult = MailWSClient.sendBulk(MailWSClient.split(users), subject, body, null, null); //TODO:
+            GroupResult groupResult = MailWSClient.sendBulk(MailWSClient.split(users), subject, body); //TODO: посылка аттачмента из веба
             result = groupResult.toString();
             log.info("Processing finished with result: {}", result);
         } catch (Exception e) {

@@ -18,12 +18,17 @@ public class MailServiceClient {
         MailService mailService = service.getPort(MailService.class);
 
         String state = mailService.sendToGroup(ImmutableSet.of(new Addressee("trashink@yandex.ru", null)), null,
-                "Group mail subject", "Group mail body", "filename", new byte[1]); //TODO: заглушки, Hw8
+                "Group mail subject", "Group mail body");
         System.out.println("Group mail state: " + state);
 
         GroupResult groupResult = mailService.sendBulk(ImmutableSet.of(
                 new Addressee("Мастер Java <trashink@yandex.ru>"),
+                new Addressee("Bad Email <bad_email.ru>")), "Bulk mail subject", "Bulk mail body");
+
+        GroupResult groupResultWithAttachment = mailService.sendBulkWithAttachment(ImmutableSet.of(
+                new Addressee("Мастер Java <trashink@yandex.ru>"),
                 new Addressee("Bad Email <bad_email.ru>")), "Bulk mail subject", "Bulk mail body", "filename", new byte[1]);
         System.out.println("\nBulk mail groupResult:\n" + groupResult);
+        System.out.println("\nBulk mail with attachment groupResult:\n" + groupResultWithAttachment);
     }
 }

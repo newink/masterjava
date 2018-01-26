@@ -15,7 +15,7 @@ import java.util.Set;
 public interface MailService {
 
     @WebMethod
-    String sendToGroup(
+    String sendToGroupWithAttachment(
             @WebParam(name = "to") Set<Addressee> to,
             @WebParam(name = "cc") Set<Addressee> cc,
             @WebParam(name = "subject") String subject,
@@ -24,11 +24,24 @@ public interface MailService {
             @WebParam(name = "attachment") byte[] attachment) throws WebStateException;
 
     @WebMethod
-    GroupResult sendBulk(
+    GroupResult sendBulkWithAttachment(
             @WebParam(name = "to") Set<Addressee> to,
             @WebParam(name = "subject") String subject,
             @WebParam(name = "body") String body,
             @WebParam(name = "filename") String filename,
             @WebParam(name = "attachment") byte[] attachment) throws WebStateException;
 
+
+    @WebMethod
+    String sendToGroup(
+            @WebParam(name = "to") Set<Addressee> to,
+            @WebParam(name = "cc") Set<Addressee> cc,
+            @WebParam(name = "subject") String subject,
+            @WebParam(name = "body") String body) throws WebStateException;
+
+    @WebMethod
+    GroupResult sendBulk(
+            @WebParam(name = "to") Set<Addressee> to,
+            @WebParam(name = "subject") String subject,
+            @WebParam(name = "body") String body) throws WebStateException;
 }

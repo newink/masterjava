@@ -19,6 +19,16 @@ public class MailServiceExecutor {
 
     private static final ExecutorService mailExecutor = Executors.newFixedThreadPool(8);
 
+    public static GroupResult sendBulk(final Set<Addressee> addressees, final String subject, final String body, String filename, byte[] attachment) throws WebStateException {
+        final CompletionService<MailResult> completionService = new ExecutorCompletionService<>(mailExecutor);
+
+        List<Future<MailResult>> futures = StreamEx.of(addressees)
+                .map(addressee -> completionService.submit(() -> MailSender.sendTo(addressee, subject, body, filename, attachment)))
+                .toList();
+
+        return processFutures(futures, completionService);
+    }
+
     public static GroupResult sendBulk(final Set<Addressee> addressees, final String subject, final String body) throws WebStateException {
         final CompletionService<MailResult> completionService = new ExecutorCompletionService<>(mailExecutor);
 
@@ -26,6 +36,10 @@ public class MailServiceExecutor {
                 .map(addressee -> completionService.submit(() -> MailSender.sendTo(addressee, subject, body)))
                 .toList();
 
+        return processFutures(futures, completionService);
+    }
+
+    private static GroupResult processFutures(List<Future<MailResult>> futures, CompletionService<MailResult> completionService) throws WebStateException {
         return new Callable<GroupResult>() {
             private int success = 0;
             private List<MailResult> failed = new ArrayList<>();
