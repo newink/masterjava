@@ -59,7 +59,11 @@
         formData.append("users", users);
         formData.append("subject", $("#subject").val());
         formData.append("body", $("#body").val());
-        formData.append("attachment", $('#attachment')[0].files[0]);
+
+        var file = $('#attachment')[0].files[0];
+        if (file !== undefined) {
+            formData.append("attachment", file);
+        }
 
         $.ajax({
           url: 'send',

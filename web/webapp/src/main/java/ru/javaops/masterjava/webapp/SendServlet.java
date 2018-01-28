@@ -43,10 +43,10 @@ public class SendServlet extends HttpServlet {
                 filename = filePart.getSubmittedFileName();
                 InputStream inputStream = filePart.getInputStream();
                 byte[] attachment = ByteStreams.toByteArray(inputStream);
-                log.debug("Sending email with attachment with name: {}", filename);
+                log.info("Sending email with attachment with name: {}", filename);
                 groupResult = MailWSClient.sendBulk(MailWSClient.split(users), subject, body, filename, attachment);
             } else {
-                log.debug("Sending email without attachment");
+                log.info("Sending email without attachment");
                 groupResult = MailWSClient.sendBulk(MailWSClient.split(users), subject, body);
             }
 

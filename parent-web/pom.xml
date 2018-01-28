@@ -39,6 +39,26 @@
                 </configuration>
             </plugin>
 
+            <!--https://habrahabr.ru/post/310738/-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <shortRevisionLength>5</shortRevisionLength>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                </configuration>
+            </plugin>
+
             <!--  http://stackoverflow.com/questions/4305935/is-it-possible-to-supply-tomcat6s-context-xml-file-via-the-maven-cargo-plugin#4417945 -->
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
@@ -109,6 +129,13 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <scm>
+        <connection>scm:git:https://github.com/newink/masterjava.git</connection>
+        <developerConnection>scm:git:https://github.com/newink/masterjava.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/newink/masterjava.git</url>
+    </scm>
 
     <profiles>
     </profiles>
