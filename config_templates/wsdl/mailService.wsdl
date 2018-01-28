@@ -19,74 +19,88 @@
         <xs:schema targetNamespace="http://mail.javaops.ru/">
             <xs:import namespace="http://common.javaops.ru/" schemaLocation="common.xsd"/>
 
-            <xs:element name="sendToGroup" type="tns:sendToGroup"/>
-            <xs:element name="sendToGroupResponse" type="tns:sendToGroupResponse"/>
             <xs:element name="sendBulk" type="tns:sendBulk"/>
             <xs:element name="sendBulkResponse" type="tns:sendBulkResponse"/>
-
+            <xs:element name="sendBulkWithAttachment" type="tns:sendBulkWithAttachment"/>
+            <xs:element name="sendBulkWithAttachmentResponse" type="tns:sendBulkWithAttachmentResponse"/>
+            <xs:element name="sendToGroup" type="tns:sendToGroup"/>
+            <xs:element name="sendToGroupResponse" type="tns:sendToGroupResponse"/>
+            <xs:element name="sendToGroupWithAttachment" type="tns:sendToGroupWithAttachment"/>
+            <xs:element name="sendToGroupWithAttachmentResponse" type="tns:sendToGroupWithAttachmentResponse"/>
+            <xs:complexType name="sendBulk">
+                <xs:sequence>
+                    <xs:element name="to" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="subject" type="xs:string" minOccurs="0"/>
+                    <xs:element name="body" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="addressee">
+                <xs:sequence>
+                    <xs:element name="email" type="xs:string" minOccurs="0"/>
+                    <xs:element name="name" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="sendBulkResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="tns:groupResult" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="groupResult">
+                <xs:sequence>
+                    <xs:element name="failed" type="tns:mailResult" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="success" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="mailResult">
+                <xs:sequence>
+                    <xs:element name="email" type="xs:string" minOccurs="0"/>
+                    <xs:element name="result" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="sendToGroupWithAttachment">
+                <xs:sequence>
+                    <xs:element name="to" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="cc" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="subject" type="xs:string" minOccurs="0"/>
+                    <xs:element name="body" type="xs:string" minOccurs="0"/>
+                    <xs:element name="filename" type="xs:string" minOccurs="0"/>
+                    <xs:element name="attachment" type="xs:base64Binary" nillable="true" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="sendToGroupWithAttachmentResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="sendToGroup">
                 <xs:sequence>
                     <xs:element name="to" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="cc" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="subject" type="xs:string" minOccurs="0"/>
-                    <xs:element name="body" type="xs:string" minOccurs="1"/>
-                    <xs:element name="attachment" type="xs:base64Binary" nillable="true" minOccurs="0"/>
+                    <xs:element name="body" type="xs:string" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="sendToGroupResponse">
                 <xs:sequence>
-                    <xs:element name="status" type="xs:string"/>
+                    <xs:element name="return" type="xs:string" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
-
-            <xs:complexType name="sendBulk">
+            <xs:complexType name="sendBulkWithAttachment">
                 <xs:sequence>
-                    <xs:element name="to" type="tns:addressee" maxOccurs="unbounded"/>
+                    <xs:element name="to" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="subject" type="xs:string" minOccurs="0"/>
-                    <xs:element name="body" type="xs:string" minOccurs="1"/>
+                    <xs:element name="body" type="xs:string" minOccurs="0"/>
+                    <xs:element name="filename" type="xs:string" minOccurs="0"/>
                     <xs:element name="attachment" type="xs:base64Binary" nillable="true" minOccurs="0"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="sendBulkResponse">
+            <xs:complexType name="sendBulkWithAttachmentResponse">
                 <xs:sequence>
-                    <xs:element name="groupResult">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="failed" type="tns:mailResult" nillable="true" minOccurs="0"
-                                            maxOccurs="unbounded"/>
-                                <xs:element name="success" type="xs:int"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
+                    <xs:element name="return" type="tns:groupResult" minOccurs="0"/>
                 </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="mailResult">
-                <xs:simpleContent>
-                    <xs:extension base="xs:string">
-                        <xs:attribute type="xs:string" name="email"/>
-                    </xs:extension>
-                </xs:simpleContent>
-            </xs:complexType>
-
-            <xs:complexType name="addressee">
-                <xs:simpleContent>
-                    <xs:extension base="xs:string">
-                        <xs:attribute type="xs:string" name="email"/>
-                    </xs:extension>
-                </xs:simpleContent>
-            </xs:complexType>
-
-            <xs:complexType name="sendMailResponse">
-                <xs:sequence/>
             </xs:complexType>
         </xs:schema>
     </types>
-    <message name="sendToGroup">
-        <part name="parameters" element="tns:sendToGroup"/>
-    </message>
-    <message name="sendToGroupResponse">
-        <part name="parameters" element="tns:sendToGroupResponse"/>
-    </message>
     <message name="sendBulk">
         <part name="parameters" element="tns:sendBulk"/>
     </message>
@@ -94,29 +108,53 @@
         <part name="parameters" element="tns:sendBulkResponse"/>
     </message>
     <message name="WebStateException">
-        <part name="fault" element="common:webStateException"/>
+        <part xmlns:ns2="http://common.javaops.ru/" name="fault" element="ns2:webStateException"/>
+    </message>
+    <message name="sendBulkWithAttachment">
+        <part name="parameters" element="tns:sendBulkWithAttachment"/>
+    </message>
+    <message name="sendBulkWithAttachmentResponse">
+        <part name="parameters" element="tns:sendBulkWithAttachmentResponse"/>
+    </message>
+    <message name="sendToGroupWithAttachment">
+        <part name="parameters" element="tns:sendToGroupWithAttachment"/>
+    </message>
+    <message name="sendToGroupWithAttachmentResponse">
+        <part name="parameters" element="tns:sendToGroupWithAttachmentResponse"/>
+    </message>
+    <message name="sendToGroup">
+        <part name="parameters" element="tns:sendToGroup"/>
+    </message>
+    <message name="sendToGroupResponse">
+        <part name="parameters" element="tns:sendToGroupResponse"/>
     </message>
 
     <portType name="MailService">
+        <operation name="sendBulk">
+            <input wsam:Action="http://mail.javaops.ru/MailService/sendBulkRequest" message="tns:sendBulk"/>
+            <output wsam:Action="http://mail.javaops.ru/MailService/sendBulkResponse" message="tns:sendBulkResponse"/>
+            <fault message="tns:WebStateException" name="WebStateException" wsam:Action="http://mail.javaops.ru/MailService/sendBulk/Fault/WebStateException"/>
+        </operation>
+        <operation name="sendBulkWithAttachment">
+            <input wsam:Action="http://mail.javaops.ru/MailService/sendBulkWithAttachmentRequest" message="tns:sendBulkWithAttachment"/>
+            <output wsam:Action="http://mail.javaops.ru/MailService/sendBulkWithAttachmentResponse" message="tns:sendBulkWithAttachmentResponse"/>
+            <fault message="tns:WebStateException" name="WebStateException" wsam:Action="http://mail.javaops.ru/MailService/sendBulkWithAttachment/Fault/WebStateException"/>
+        </operation>
+        <operation name="sendToGroupWithAttachment">
+            <input wsam:Action="http://mail.javaops.ru/MailService/sendToGroupWithAttachmentRequest" message="tns:sendToGroupWithAttachment"/>
+            <output wsam:Action="http://mail.javaops.ru/MailService/sendToGroupWithAttachmentResponse" message="tns:sendToGroupWithAttachmentResponse"/>
+            <fault message="tns:WebStateException" name="WebStateException" wsam:Action="http://mail.javaops.ru/MailService/sendToGroupWithAttachment/Fault/WebStateException"/>
+        </operation>
         <operation name="sendToGroup">
             <input wsam:Action="http://mail.javaops.ru/MailService/sendToGroupRequest" message="tns:sendToGroup"/>
-            <output wsam:Action="http://mail.javaops.ru/MailService/sendToGroupResponse"
-                    message="tns:sendToGroupResponse"/>
-            <fault wsam:Action="http://mail.javaops.ru/MailService/sendBulkMail/Fault/WebStateException"
-                   message="tns:WebStateException" name="WebStateException"/>
-        </operation>
-        <operation name="sendBulk">
-            <input wsam:Action="http://mail.javaops.ru/MailService/sendBulkRequest"
-                   message="tns:sendBulk"/>
-            <output wsam:Action="http://mail.javaops.ru/MailService/sendBulkResponse"
-                    message="tns:sendBulkResponse"/>
-            <fault wsam:Action="http://mail.javaops.ru/MailService/sendBulkMail/Fault/WebStateException"
-                   message="tns:WebStateException" name="WebStateException"/>
+            <output wsam:Action="http://mail.javaops.ru/MailService/sendToGroupResponse" message="tns:sendToGroupResponse"/>
+            <fault message="tns:WebStateException" name="WebStateException" wsam:Action="http://mail.javaops.ru/MailService/sendToGroup/Fault/WebStateException"/>
         </operation>
     </portType>
     <binding name="MailServiceImplPortBinding" type="tns:MailService">
+        <wsp:PolicyReference URI="#MailServiceImplPortBinding_MTOM_Policy"/>
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-        <operation name="sendToGroup">
+        <operation name="sendBulk">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal"/>
@@ -128,7 +166,31 @@
                 <soap:fault name="WebStateException" use="literal"/>
             </fault>
         </operation>
-        <operation name="sendBulk">
+        <operation name="sendBulkWithAttachment">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="WebStateException">
+                <soap:fault name="WebStateException" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="sendToGroupWithAttachment">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="WebStateException">
+                <soap:fault name="WebStateException" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="sendToGroup">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal"/>

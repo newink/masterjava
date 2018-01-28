@@ -8,7 +8,7 @@ import java.util.Set;
 
 @MTOM
 @WebService(endpointInterface = "ru.javaops.masterjava.service.mail.MailService", targetNamespace = "http://mail.javaops.ru/"
-//          , wsdlLocation = "WEB-INF/wsdl/mailService.wsdl"
+          , wsdlLocation = "WEB-INF/wsdl/mailService.wsdl"
 )
 public class MailServiceImpl implements MailService {
     @Override
