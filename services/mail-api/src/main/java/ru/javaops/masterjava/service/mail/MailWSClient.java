@@ -27,7 +27,7 @@ public class MailWSClient {
     public static final String PASSWORD;
     private static final SoapLoggingHandlers.ClientHandler LOGGING_HANDLER;
     private static final StatisticsHandler STATISTICS_HANDLER = new StatisticsHandler();
-    private static final Config MAIL_CONFIG;
+    private static final Config MAIL_CONFIG = Configs.getConfig("hosts.conf", "hosts.mail");
 
     public static String AUTH_HEADER;
 
@@ -38,7 +38,6 @@ public class MailWSClient {
 
         WS_CLIENT.init("mail.endpoint", "/mail/mailService?wsdl");
 
-        MAIL_CONFIG = Configs.getConfig("hosts.conf", "hosts.mail");
         USER = MAIL_CONFIG.getString("user");
         PASSWORD = MAIL_CONFIG.getString("password");
         LOGGING_HANDLER = new SoapLoggingHandlers.ClientHandler(MAIL_CONFIG.getEnum(Level.class, "debug.client"));

@@ -3,6 +3,10 @@
                        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee/ ">
     <handler-chain>
         <handler>
+            <handler-name>SecurityHandler</handler-name>
+            <handler-class>ru.javaops.masterjava.service.mail.handler.SoapServerSecurityHandler</handler-class>
+        </handler>
+        <handler>
             <handler-name>SoapLoggingHandler</handler-name>
             <handler-class>ru.javaops.masterjava.web.handler.SoapLoggingHandlers$ServerHandler</handler-class>
         </handler>
