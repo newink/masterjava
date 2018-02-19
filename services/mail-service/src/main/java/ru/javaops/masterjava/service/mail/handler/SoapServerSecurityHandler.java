@@ -19,11 +19,11 @@ import static ru.javaops.masterjava.web.SoapUtil.getMessageText;
 @Slf4j
 public class SoapServerSecurityHandler extends SoapBaseHandler {
 
-    private final static Config MAIL_CONFIG = Configs.getConfig("hosts.conf", "hosts.mail");
     private final static String AUTH_HEADER;
 
     static {
-        AUTH_HEADER = AuthUtil.encodeBasicAuthHeader(MAIL_CONFIG.getString("user"), MAIL_CONFIG.getString("password"));
+        Config config = Configs.getConfig("hosts.conf", "hosts.mail");
+        AUTH_HEADER = AuthUtil.encodeBasicAuthHeader(config.getString("user"), config.getString("password"));
     }
 
     @Override
