@@ -4,8 +4,10 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.io.Resources;
+import com.typesafe.config.Config;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;
+import ru.javaops.masterjava.config.Configs;
 import ru.javaops.masterjava.web.AuthUtil;
 import ru.javaops.masterjava.web.WebStateException;
 import ru.javaops.masterjava.web.WsClient;
@@ -19,18 +21,26 @@ import java.util.Set;
 @Slf4j
 public class MailWSClient {
     private static final WsClient<MailService> WS_CLIENT;
-    public static final String USER = "user";
-    public static final String PASSWORD = "password";
-    private static final SoapLoggingHandlers.ClientHandler LOGGING_HANDLER = new SoapLoggingHandlers.ClientHandler(Level.DEBUG);
 
-    public static String AUTH_HEADER = AuthUtil.encodeBasicAuthHeader(USER, PASSWORD);
+    public static final String USER;
+    public static final String PASSWORD;
+    private static final SoapLoggingHandlers.ClientHandler LOGGING_HANDLER;
+    private static final Config HOSTS;
+
+    public static String AUTH_HEADER;
 
     static {
         WS_CLIENT = new WsClient<>(Resources.getResource("wsdl/mailService.wsdl"),
                 new QName("http://mail.javaops.ru/", "MailServiceImplService"),
                 MailService.class);
 
-        WS_CLIENT.init("mail", "/mail/mailService?wsdl");
+        WS_CLIENT.init("endpoint", "/mail/mailService?wsdl");
+
+        HOSTS = Configs.getConfig("hosts.conf", "hosts.mail");
+        USER = HOSTS.getString("user");
+        PASSWORD = HOSTS.getString("password");
+        LOGGING_HANDLER = new SoapLoggingHandlers.ClientHandler(HOSTS.getEnum(Level.class, "debug.client"));
+        AUTH_HEADER = AuthUtil.encodeBasicAuthHeader(USER, PASSWORD);
     }
 
 

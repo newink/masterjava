@@ -18,7 +18,7 @@ public class WsClient<T> {
     private static Config HOSTS;
 
     static {
-        HOSTS = Configs.getConfig("hosts.conf", "hosts");
+        HOSTS = Configs.getConfig("hosts.conf", "hosts.mail");
     }
 
     private final Class<T> serviceClass;
