@@ -18,7 +18,7 @@ public class WsClient<T> {
     private static Config HOSTS;
 
     static {
-        HOSTS = Configs.getConfig("hosts.conf", "hosts.mail");
+        HOSTS = Configs.getConfig("hosts.conf", "hosts");
     }
 
     private final Class<T> serviceClass;
@@ -59,4 +59,6 @@ public class WsClient<T> {
     public static WebStateException getWebStateException(Throwable t, ExceptionType type) {
         return (t instanceof WebStateException) ? (WebStateException) t : new WebStateException(t, type);
     }
+
+
 }

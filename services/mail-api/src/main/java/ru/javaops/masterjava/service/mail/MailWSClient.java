@@ -12,6 +12,7 @@ import ru.javaops.masterjava.web.AuthUtil;
 import ru.javaops.masterjava.web.WebStateException;
 import ru.javaops.masterjava.web.WsClient;
 import ru.javaops.masterjava.web.handler.SoapLoggingHandlers;
+import ru.javaops.masterjava.web.handler.StatisticsHandler;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.soap.MTOMFeature;
@@ -25,7 +26,8 @@ public class MailWSClient {
     public static final String USER;
     public static final String PASSWORD;
     private static final SoapLoggingHandlers.ClientHandler LOGGING_HANDLER;
-    private static final Config HOSTS;
+    private static final StatisticsHandler STATISTICS_HANDLER = new StatisticsHandler();
+    private static final Config MAIL_CONFIG;
 
     public static String AUTH_HEADER;
 
@@ -34,12 +36,12 @@ public class MailWSClient {
                 new QName("http://mail.javaops.ru/", "MailServiceImplService"),
                 MailService.class);
 
-        WS_CLIENT.init("endpoint", "/mail/mailService?wsdl");
+        WS_CLIENT.init("mail.endpoint", "/mail/mailService?wsdl");
 
-        HOSTS = Configs.getConfig("hosts.conf", "hosts.mail");
-        USER = HOSTS.getString("user");
-        PASSWORD = HOSTS.getString("password");
-        LOGGING_HANDLER = new SoapLoggingHandlers.ClientHandler(HOSTS.getEnum(Level.class, "debug.client"));
+        MAIL_CONFIG = Configs.getConfig("hosts.conf", "hosts.mail");
+        USER = MAIL_CONFIG.getString("user");
+        PASSWORD = MAIL_CONFIG.getString("password");
+        LOGGING_HANDLER = new SoapLoggingHandlers.ClientHandler(MAIL_CONFIG.getEnum(Level.class, "debug.client"));
         AUTH_HEADER = AuthUtil.encodeBasicAuthHeader(USER, PASSWORD);
     }
 
@@ -62,6 +64,7 @@ public class MailWSClient {
         MailService port = WS_CLIENT.getPort(new MTOMFeature(1024));
         WsClient.setAuth(port, USER, PASSWORD);
         WsClient.setHandler(port, LOGGING_HANDLER);
+        WsClient.setHandler(port, STATISTICS_HANDLER);
         return port;
     }
 
