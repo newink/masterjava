@@ -28,7 +28,7 @@ public class SoapServerSecurityHandler extends SoapBaseHandler {
 
     @Override
     public boolean handleMessage(MessageHandlerContext messageHandlerContext) {
-        if (isOutbound(messageHandlerContext)) {
+        if (!isOutbound(messageHandlerContext)) {
             Map<String, List<String>> httpHeaders = (Map<String, List<String>>) messageHandlerContext.get(MessageHandlerContext.HTTP_REQUEST_HEADERS);
             int authStatus = AuthUtil.checkBasicAuth(httpHeaders, AUTH_HEADER);
             if (authStatus != 0) {
