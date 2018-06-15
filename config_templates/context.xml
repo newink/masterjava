@@ -42,8 +42,8 @@
               testOnBorrow="true"
               logAbandoned="true"
               driverClassName="org.postgresql.Driver"
-              username="user"
-              password="password"
+              username="masterjava"
+              password="masterjava"
               url="jdbc:postgresql://localhost:5432/masterjava"/>
 
     <Resource name="jms/ConnectionFactory"
